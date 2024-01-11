@@ -51,6 +51,7 @@ def filter_datum(fields: List[str], redaction: str, message: str,
                          message)
     return message
 
+
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """Return a connector to a remote database"""
     host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
