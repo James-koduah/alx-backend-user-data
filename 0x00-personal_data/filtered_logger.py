@@ -5,7 +5,8 @@ Return a log message obfuscated
 import re
 from typing import List
 import logging
-
+import mysql.connector
+import os
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
@@ -30,6 +31,7 @@ class RedactingFormatter(logging.Formatter):
                                self.SEPARATOR)
         return message
 
+
 def get_logger() -> logging.Logger:
     """Get a logger Object"""
     logger = logging.getLogger('user_data')
@@ -48,3 +50,17 @@ def filter_datum(fields: List[str], redaction: str, message: str,
         message = re.sub(f'{i}=.*?{separator}', f'{i}={redaction}{separator}',
                          message)
     return message
+
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """Return a connector to a remote database"""
+    host = os.environ.get('PERSONAL_DATA_DB_HOST', 'localhost')
+    user = os.environ.get('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.environ.get('PERSONAL_DATA_DB_PASSWORD', '')
+    db_name = os.environ.get("PERSONAL_DATA_DB_NAME")
+    db = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=db_name
+            )
+    return db
