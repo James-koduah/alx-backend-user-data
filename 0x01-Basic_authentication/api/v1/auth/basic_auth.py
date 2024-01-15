@@ -52,9 +52,9 @@ class BasicAuth(Auth):
                                      user_email: str,
                                      user_pwd: str) -> TypeVar('User'):
         """return user object"""
-        if user_email is None or type(user_email) is str:
+        if user_email is None or type(user_email) is not str:
             return None
-        if user_pwd is None or type(user_pwd) is str:
+        if user_pwd is None or type(user_pwd) is not str:
             return None
         user = User()
         yy = user.search({'email': user_email})
@@ -65,3 +65,16 @@ class BasicAuth(Auth):
             return None
 
         return user
+
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """return the User instance for a request"""
+        auth_header = self.authorization_header(request)
+        extracted_header = self.extract_base64_authorization_header(auth_header)
+        decoded_header = self.decode_base64_authorization_header(extracted_header)
+        user_credentials = self.extract_user_credentials(decoded_header)
+        email, password = user_credentials
+        user = self.user_object_from_credentials(email, password)
+        return user
+
+
