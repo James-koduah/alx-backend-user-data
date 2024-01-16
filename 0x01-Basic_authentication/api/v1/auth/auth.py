@@ -10,13 +10,25 @@ class Auth():
         """require_auth return false"""
         if path is None:
             return True
+
+        wildcard_paths = []
+        for excluded_path in excluded_paths:
+            if excluded_path[-1] == '*':
+                wildcard_paths.append(excluded_path[0:-1])
+
         if path[-1] != '/':
             path = path + '/'
+
         if excluded_paths is None or excluded_paths == []:
             return True
+
         if path in excluded_paths:
             return False
 
+        if wildcard_paths != []:
+            for excluded_path in wildcard_paths:
+                if path.startswith(excluded_path):
+                    return False
         return True
 
     def authorization_header(self, request=None) -> str:
