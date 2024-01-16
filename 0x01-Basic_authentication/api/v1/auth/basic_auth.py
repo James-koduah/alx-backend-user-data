@@ -44,7 +44,9 @@ class BasicAuth(Auth):
         if isinstance(decoded_base64_authorization_header, str) is False:
             return (None, None)
         if ':' in decoded_base64_authorization_header:
-            email, passwd = decoded_base64_authorization_header.split(':')
+            index = decoded_base64_authorization_header.find(':')
+            email = decoded_base64_authorization_header[0:index]
+            passwd = decoded_base64_authorization_header[index+1:]
             return (email, passwd)
         return (None, None)
 
