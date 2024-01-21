@@ -36,11 +36,14 @@ def before_request():
                 '/api/v1/auth_session/login/'
                 ]
         if auth.require_auth(request.path, h):
-            if auth.authorization_header(request) is None:
-                abort(401)
-            if env_auth == 'session_auth':
-                if auth.session_cookie(request) is None:
+            if env_auth != 'session_auth':
+                if auth.authorization_header(request) is None:
                     abort(401)
+            else:
+                if auth.authorization_header(request) is None and \
+                        auth.session_cookie(request) is None:
+                    abort(401)
+
             if auth.current_user(request) is None:
                 abort(403)
             request.current_user = auth.current_user(request)
