@@ -11,6 +11,7 @@ import os
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
+app.secret_key = 'super secret key'
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 auth = None
 env_auth = getenv("AUTH_TYPE", None)
