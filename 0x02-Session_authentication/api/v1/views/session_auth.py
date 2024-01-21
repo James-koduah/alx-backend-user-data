@@ -29,5 +29,6 @@ def auth_session_login():
     from api.v1.app import auth
     session_id = auth.create_session(user.id)
     session_name_env = os.getenv('SESSION_NAME')
-    session[session_name_env] = session_id
-    return jsonify(user.to_json())
+    response = jsonify(user.to_json())
+    response.set_cookie(session_name, session_id)
+    return response
