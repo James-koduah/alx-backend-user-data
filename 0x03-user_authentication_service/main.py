@@ -3,20 +3,16 @@
 
 import requests
 
+
 def register_user(email: str, password: str) -> None:
     """test register user route"""
     data = {'email': email, 'password': password}
     req = requests.post('http://localhost:5000/users', data=data)
     expected_res = {
             "email": "guillaume@holberton.io",
-            "message":"user created"
+            "message": "user created"
             }
     assert req.json() == expected_res
-
-
-
-
-
 
 
 EMAIL = "guillaume@holberton.io"
