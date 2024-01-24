@@ -33,6 +33,22 @@ class Auth:
         except Exception as e:
             return False
 
+    def create_session(self, email: str) -> str:
+        """create or return a new session id"""
+        try:
+            user = self._db.find_user_by(email=email)
+        except Exception as e:
+            return None
+
+        if user.session_id:
+            return str(user.session_id)
+        else:
+            self._db.update_user(
+                    user.id,
+                    session_id=_generate_uuid()
+                    )
+            return str(user.session_id)
+
 
 def _hash_password(password: str) -> bytes:
     """hash a password"""
