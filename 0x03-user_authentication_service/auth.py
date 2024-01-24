@@ -57,6 +57,14 @@ class Auth:
         except Exception as e:
             return None
 
+    def destroy_session(self, user_id: int) -> None:
+        """destroy a users session"""
+        try:
+            self._db.update_user(user_id, session_id=None)
+            return None
+        except Exception as e:
+            return None
+
 
 def _hash_password(password: str) -> bytes:
     """hash a password"""
