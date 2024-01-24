@@ -65,6 +65,15 @@ class Auth:
         except Exception as e:
             return None
 
+    def get_reset_password_token(self, email: str) -> str:
+        """update the user's reset_token field"""
+        try:
+            user = self._db.find_user_by(email=email)
+        except Exception as e:
+            raise ValueError
+        self._db.update_user(user.id, reset_token=_generate_uuid())
+        return str(user.reset_token)
+
 
 def _hash_password(password: str) -> bytes:
     """hash a password"""
