@@ -74,6 +74,21 @@ class Auth:
         self._db.update_user(user.id, reset_token=_generate_uuid())
         return str(user.reset_token)
 
+    def update_password(self, reset_token: str, password: str) -> None:
+        """update a users password"""
+        try:
+            user = self._db.find_user_by(reset_token=reset_token)
+        except Exception as e:
+            raise ValueError
+
+        hashed_password = _hash_password(password)
+        self._db.update_user(
+                user.id,
+                hash_password=hashed_password,
+                reset_token=None
+                )
+        return None
+
 
 def _hash_password(password: str) -> bytes:
     """hash a password"""
