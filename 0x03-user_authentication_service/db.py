@@ -30,11 +30,9 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(email: str, hashed_password: str) -> User:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """Creates and saves a user object to the database"""
-        new_user = User()
-        new_user.email = email
-        new_user.hashed_password = hashed_password
-        self.__session.add(new_user)
-        self.__session.commit()
+        new_user = User(email=email, hashed_password=hashed_password)
+        self._session.add(new_user)
+        self._session.commit()
         return new_user
