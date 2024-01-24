@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """flask app"""
 
-from flask import Flask, request, jsonify, abort
+from flask import Flask, request, jsonify, abort, redirect
 from auth import Auth
 
 AUTH = Auth()
@@ -31,7 +31,7 @@ def users():
 
 
 @app.route('/sessions', methods=['post'], strict_slashes=False)
-def login() -> str:
+def login():
     """log a user in with a new session"""
     email = request.form.get('email', '')
     password = request.form.get('password', '')
@@ -45,6 +45,18 @@ def login() -> str:
         response.set_cookie('session_id', new_session)
         return response
     abort(401)
+
+
+@app.route('/sessions', methods=['delete'], strict_slashes=False)
+def logout():
+    """log a user out and destroy session"""
+    session_id = request.cookies.get('session_id')
+    user = AUTH.get_user_from_session_id(session_id)
+    if user:
+        AUTH.destroy_session(user.id)
+        return redirect('/')
+    else:
+        abort(403)
 
 
 if __name__ == "__main__":
