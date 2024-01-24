@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""user class model"""
-from sqlalchemy.orm import declarative_base, relationship
+"""user class model that declears a table named users"""
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String
 
 
